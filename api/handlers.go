@@ -17,7 +17,7 @@ func renderErrorBadge(c echo.Context, label string) error {
 	if err != nil {
 		return c.String(400, err.Error())
 	}
-	return c.HTML(404, string(badge))
+	return c.Blob(404, "image/svg+xml", badge)
 }
 
 func (s *Server) profileVisits(c echo.Context) error {
@@ -57,7 +57,7 @@ func (s *Server) profileVisits(c echo.Context) error {
 	if err != nil || update_user == 0 {
 		s.db.User.Create().SetID(userInfo.Id).SetNodeID(userInfo.NodeId).SetUsername(userInfo.Username).SetVisits(0).Save(c.Request().Context())
 		badge, _ := badge.RenderBytes(label, "0", badge.Color(color))
-		return c.HTML(200, string(badge))
+		return c.Blob(200, "image/svg+xml", badge)
 	}
 
 	get_user, err := s.db.User.Get(c.Request().Context(), userInfo.Id)
@@ -68,5 +68,5 @@ func (s *Server) profileVisits(c echo.Context) error {
 	if err != nil {
 		return c.String(400, err.Error())
 	}
-	return c.HTML(200, string(badge))
+	return c.Blob(200, "image/svg+xml", badge)
 }
