@@ -68,5 +68,6 @@ func (s *Server) profileVisits(c echo.Context) error {
 	if err != nil {
 		return c.String(400, err.Error())
 	}
+	c.Response().Header().Set("Cache-Control", "public, max-age=0, no-cache, no-store, must-revalidate")
 	return c.Blob(200, "image/svg+xml", badge)
 }
