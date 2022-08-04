@@ -8,6 +8,7 @@ Profile visits, add this to your readme file:
 
 ### TO-DO
 - [x] Total profile visits
+- [x] Deploy to Heroku
 - [ ] Total commits 
 - [ ] All programming language used 
 - [ ] Github status(followers, following)
