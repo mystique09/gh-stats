@@ -20,7 +20,7 @@ func Launch() {
 		PORT = ":3000"
 	}
 
-	client, err := ent.Open("postgres", os.Getenv("DB_URL"))
+	client, err := ent.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
