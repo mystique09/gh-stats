@@ -13,8 +13,14 @@ import (
 
 func Launch() {
 	godotenv.Load()
+	PORT := os.Getenv("PORT")
+	PORT = ":" + PORT
 
-	client, err := ent.Open("postgres", os.Getenv("DB_DB"))
+	if PORT == "" {
+		PORT = ":3000"
+	}
+
+	client, err := ent.Open("postgres", os.Getenv("DB_URL"))
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)
 	}
@@ -33,5 +39,5 @@ func Launch() {
 		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
 	}))
 	app.GET("/profile/:name", server.profileVisits)
-	log.Fatal(app.Start(":3000"))
+	log.Fatal(app.Start(PORT))
 }
