@@ -1,8 +1,9 @@
 # Track your github visits, followers, and total commits(comming soon) using this github status api.
+[Github Profile Status](https://profile-status.herokuapp.com) 
 
 Profile visits, add this to your readme file:
 ```md
-![profile visits](<url>/username?label=<custom_label_optional>&color=<your_prefered_color_optional>)
+![profile visits](https://profile-status.herokuapp.com/profile/username?label=<custom_label_optional>&color=<your_prefered_color_optional>)
 
 ```
 
