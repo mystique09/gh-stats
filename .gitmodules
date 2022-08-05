@@ -1,3 +1,3 @@
 [submodule "gh-stats-client"]
-	path = gh-stats-client
+	path = web
 	url = https://github.com/mystique09/gh-stats-client
