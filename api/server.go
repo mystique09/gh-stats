@@ -42,8 +42,11 @@ func Launch() {
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
 	}))
+	app.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20)))
+	app.Use(middleware.Recover())
+
 	enableDevelopment(app, MODE)
-	app.GET("/profile/:name", server.profileVisits)
+	app.GET("/profile/:name", server.profileVisits, githubMiddleware)
 	log.Fatal(app.Start(PORT))
 }
 

@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
@@ -18,6 +19,20 @@ func renderErrorBadge(c echo.Context, label string) error {
 		return c.String(400, err.Error())
 	}
 	return c.Blob(404, "image/svg+xml", badge)
+}
+
+func githubMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user_agent := c.Request().Header.Get("user-agent")
+		if strings.Contains(user_agent, "github-camo") {
+			return next(c)
+		}
+		badge, err := badge.RenderBytes("Profile Visits", "0", "blue")
+		if err != nil {
+			return c.String(400, err.Error())
+		}
+		return c.Blob(404, "image/svg+xml", badge)
+	}
 }
 
 func (s *Server) profileVisits(c echo.Context) error {
