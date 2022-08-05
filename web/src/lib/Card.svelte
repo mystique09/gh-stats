@@ -15,7 +15,7 @@
   }
 
   function copyToClipboard(val: string) {
-    navigator.clipboard.writeText(val);
+    navigator.clipboard.writeText(`![](${val})`);
   }
 </script>
 
