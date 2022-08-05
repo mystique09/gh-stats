@@ -2,17 +2,21 @@ package api
 
 import (
 	"context"
+	"errors"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/mystique09/gh-profile/ent"
+	"github.com/mystique09/gh-profile/web"
 )
 
 func Launch() {
 	godotenv.Load()
+	MODE := os.Getenv("MODE")
 	PORT := os.Getenv("PORT")
 	PORT = ":" + PORT
 
@@ -38,6 +42,26 @@ func Launch() {
 	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
 	}))
+	enableDevelopment(app, MODE)
 	app.GET("/profile/:name", server.profileVisits)
 	log.Fatal(app.Start(PORT))
+}
+
+func enableDevelopment(e *echo.Echo, mode string) {
+	if mode == "development" {
+		e.StaticFS("", web.BuildHTTPS())
+		e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+			Root: "web/dist",
+			//Browse: true,
+			HTML5: true,
+		}))
+	} else if mode == "production" {
+		e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+			Filesystem: http.FS(web.BuildHTTPS()),
+			HTML5:      true,
+		}))
+
+	} else {
+		log.Fatal(errors.New("invalid mode"))
+	}
 }
